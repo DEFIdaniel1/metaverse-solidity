@@ -17,7 +17,8 @@ async function main() {
     const silverQty = await fixedMetaverse.balanceOf(owner.address, 1)
     const lancelotsSwordQty = await fixedMetaverse.balanceOf(owner.address, 2)
 
-    console.log(`\n Metaverse contract deployed with: \n
+    console.log(`\n Metaverse contract deployed with: 
+        Contract address: ${fixedMetaverse.address}\n 
         Gold: ${goldQty} 
         Silver: ${silverQty} 
         Lancelot's Sword: ${lancelotsSwordQty} \n`)
