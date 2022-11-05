@@ -5,9 +5,9 @@ import 'hardhat-deploy'
 import 'hardhat-gas-reporter'
 import 'ethers'
 import 'hardhat-gas-reporter'
+import '@nomicfoundation/hardhat-chai-matchers'
 require('dotenv').config()
 
-const RINKEBY_URL = process.env.RINKEBY_URL || 'rinkeby-key'
 const POLYGON_TEST_URL = process.env.POLYGON_TEST_URL || 'rinkeby-key'
 const PRIVATE_KEY = process.env.PRIVATE_KEY || '0x0noKey'
 const ETHERSCAN_API = process.env.ETHERSCAN_API || 'etherscan-key'

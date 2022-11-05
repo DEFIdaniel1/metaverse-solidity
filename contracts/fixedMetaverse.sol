@@ -3,13 +3,13 @@ pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
-error MyMetaverse__AccountIdArrayMismatch();
+error FixedMetaverse__AccountIdArrayMismatch();
 
     /** 
     * @notice Contract for a basic metaverse with fixed values and limited contract functionality
     * @notice Use-cases best for an economy with fixed values and unchangeable assets amounts
     */
-contract MyMetaverse is ERC1155 {
+contract FixedMetaverse is ERC1155 {
     /** 
     * @dev uint values for itemIds
     */
@@ -34,7 +34,7 @@ contract MyMetaverse is ERC1155 {
     uint256 public constant RARE_BOW = 10;
 
 // Fixed asset value contract. Non-mintable
-    constructor() ERC1155("https://game.example/api/item/{id}.json") {
+    constructor(string memory _tokenURIs) ERC1155(_tokenURIs) {
         _mint(msg.sender, GOLD, 1*1e9, ""); // 1,000,000,000
         _mint(msg.sender, SILVER, 10*1e9, ""); // 10,000,000,000
         _mint(msg.sender, LANCELOTS_SWORD, 1, ""); // 1
@@ -60,7 +60,7 @@ contract MyMetaverse is ERC1155 {
         returns (uint256[] memory)
     {
         if(playerAccounts.length != itemIds.length){
-            revert MyMetaverse__AccountIdArrayMismatch();
+            revert FixedMetaverse__AccountIdArrayMismatch();
         }
 
         uint256[] memory batchBalances = new uint256[](playerAccounts.length);
