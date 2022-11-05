@@ -2,6 +2,7 @@
 pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
 
 error FixedMetaverse__AccountIdArrayMismatch();
 
@@ -70,5 +71,13 @@ contract FixedMetaverse is ERC1155 {
         }
 
         return batchBalances;
+    }
+
+    /** 
+    * @dev URI will follow the template below of link/tokenId.json
+    * overrides the constructor URI
+    */
+    function uri(uint256 tokenId) override public pure returns (string memory) {
+        return string(abi.encodePacked(string.concat("http://link/", Strings.toString(tokenId), ".json")));
     }
 }
