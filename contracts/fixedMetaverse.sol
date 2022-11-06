@@ -97,6 +97,7 @@ contract FixedMetaverse is ERC1155 {
     // }
 
     /** 
+    * @notice Updateable URI
     * @dev alternative URI retrieval method, uses mapping from tokenId => uri 
     * must also use the setTokenUri function to set the proper URI for each token
     */
