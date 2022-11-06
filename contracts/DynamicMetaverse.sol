@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.8;
+pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
@@ -91,5 +91,12 @@ contract DynamicMetaverse is ERC1155, Pausable, Ownable {
         override
     {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    /*
+     * @dev Contract owner can update the base URI
+     */
+    function setURI(string memory newuri) public onlyOwner whenNotPaused {
+        _setURI(newuri);
     }
 }
