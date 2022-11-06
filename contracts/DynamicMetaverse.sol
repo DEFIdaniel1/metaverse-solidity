@@ -11,6 +11,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
     * @custom:security-contact security@mymetaverse.com
     */
 contract DynamicMetaverse is ERC1155, Pausable, Ownable {
+    // For on-chain tracking
+    struct Item {
+        string name;
+        uint256 quantity;
+    }
+    mapping(uint256 => Item) public idToItem;
+    uint256 public s_allItems = 0;    
+
     /** 
     * @dev uint values for itemIds
     */
@@ -36,20 +44,20 @@ contract DynamicMetaverse is ERC1155, Pausable, Ownable {
 
     constructor() ERC1155("https://myMetaverse.com/itemURIs/{id}.json") {
         // Initial supply. Can be increased with mint function
-        mint(GOLD, 1000, "");
-        mint(SILVER, 10000, "");
-        mint(LANCELOTS_SWORD, 1, ""); 
-        mint(COMMON_SWORD, 1000, ""); 
-        mint(COMMON_SHIELD, 1000, ""); 
-        mint(MERLINS_STAFF, 1, "");
-        mint(BOOK_OF_NECROMANCY, 100, ""); 
-        mint(HEALTH_POTION, 500, ""); 
-        mint(MANA_POTION, 500, ""); 
-        mint(RARE_AXE, 100, ""); 
-        mint(RARE_BOW, 100, "");
+        mint("GOLD", GOLD, 1000, "");
+        mint("SILVER", SILVER, 10000, "");
+        mint("LANCELOTS_SWORD", LANCELOTS_SWORD, 1, ""); 
+        mint("COMMON_SWORD", COMMON_SWORD, 1000, ""); 
+        mint("COMMON_SHIELD", COMMON_SHIELD, 1000, ""); 
+        mint("MERLINS_STAFF", MERLINS_STAFF, 1, "");
+        mint("BOOK_OF_NECROMANCY", BOOK_OF_NECROMANCY, 100, ""); 
+        mint("HEALTH_POTION", HEALTH_POTION, 500, ""); 
+        mint("MANA_POTION", MANA_POTION, 500, ""); 
+        mint("RARE_AXE", RARE_AXE, 100, ""); 
+        mint("RARE_BOW", RARE_BOW, 100, "");
     }
 
-    /*
+    /**
      * @dev Pausing the contract functionality. Cannot mint or transfer/batchTransfer
      * @dev Adjusted for only owner to mint and can only use when not paused
      */
@@ -61,18 +69,22 @@ contract DynamicMetaverse is ERC1155, Pausable, Ownable {
         _unpause();
     }
 
-    /*
+    /**
      * @dev Mint new items or increase supply of current items
      * @dev Adjusted for only owner to mint and can only use when not paused
      */
-    function mint(uint256 id, uint256 amount, bytes memory data)
+    function mint(string memory itemName, uint256 id, uint256 amount, bytes memory data)
         public
         whenNotPaused
         onlyOwner
     {
         _mint(msg.sender, id, amount, data);
+
+        Item memory newItem = Item(itemName, amount);
+        idToItem[id] = newItem;
+        s_allItems += 1;
     }
-    /*
+    /**
      * @dev Mint a batch of NFTs
      * @dev Adjusted for only owner to mint and can only use when not paused
      */
@@ -84,8 +96,14 @@ contract DynamicMetaverse is ERC1155, Pausable, Ownable {
         _mintBatch(msg.sender, ids, amounts, data);
     }
 
-    function _beforeTokenTransfer
-        (address operator, address from, address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data)
+    function _beforeTokenTransfer(
+        address operator, 
+        address from, 
+        address to, 
+        uint256[] memory ids, 
+        uint256[] memory amounts, 
+        bytes memory data
+    )
         internal
         whenNotPaused
         override
@@ -93,7 +111,7 @@ contract DynamicMetaverse is ERC1155, Pausable, Ownable {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
     }
 
-    /*
+    /**
      * @dev Contract owner can update the base URI
      */
     function setURI(string memory newuri) public onlyOwner whenNotPaused {

@@ -38,7 +38,7 @@ contract FixedMetaverse is ERC1155 {
     ///////////////
     // Mappings ///
     //////////////
-    mapping (uint256 => string) private s_tokenToURI; 
+    mapping(uint256 => string) private s_tokenToURI; 
 
 // Fixed asset value contract. Non-mintable
     constructor(string memory _tokenURIs) ERC1155(_tokenURIs) {

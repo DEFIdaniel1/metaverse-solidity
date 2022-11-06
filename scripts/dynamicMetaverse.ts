@@ -16,11 +16,16 @@ async function main() {
     const silverQty = await dynamicMetaverse.balanceOf(owner.address, 1)
     const lancelotsSwordQty = await dynamicMetaverse.balanceOf(owner.address, 2)
 
+    // get globalURI from the chain and tailor to gold
+    const globalUri = await dynamicMetaverse.uri(0)
+    const goldUri = globalUri.replace('{id}', '0')
+
     console.log(`\n Metaverse contract deployed with: 
         Contract address: ${dynamicMetaverse.address}\n 
         Gold: ${goldQty} 
         Silver: ${silverQty} 
-        Lancelot's Sword: ${lancelotsSwordQty} \n`)
+        Lancelot's Sword: ${lancelotsSwordQty}
+        Gold URI: ${goldUri} \n`)
 }
 
 main().catch(error => {

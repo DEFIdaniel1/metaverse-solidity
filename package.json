@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "deploy-test": "hh run --network testnet scripts/fixedMetaverse.ts",
+        "deploy-test": "hh run --network localhost scripts/dynamicMetaverse.ts",
         "deploy-goerli": "hh run --network goerli scripts/fixedMetaverse.ts"
     },
     "keywords": [],
