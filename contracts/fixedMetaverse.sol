@@ -3,6 +3,7 @@ pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 error FixedMetaverse__AccountIdArrayMismatch();
 
@@ -34,6 +35,11 @@ contract FixedMetaverse is ERC1155 {
     uint256 public constant RARE_AXE = 9;
     uint256 public constant RARE_BOW = 10;
 
+    ///////////////
+    // Mappings ///
+    //////////////
+    mapping (uint256 => string) private s_tokenToURI; 
+
 // Fixed asset value contract. Non-mintable
     constructor(string memory _tokenURIs) ERC1155(_tokenURIs) {
         _mint(msg.sender, GOLD, 1*1e9, ""); // 1,000,000,000
@@ -49,6 +55,10 @@ contract FixedMetaverse is ERC1155 {
         _mint(msg.sender, RARE_BOW, 1*1e5, ""); // 100,000
     }
 
+
+    ///////////////
+    // Functions ///
+    //////////////
     /** 
     * @dev get batch balances for multiple items/accounts, array values must match
     * @param playerAccounts is an array of owner accounts be wrapped in ""
@@ -73,11 +83,27 @@ contract FixedMetaverse is ERC1155 {
         return batchBalances;
     }
 
+/**
+ *  @notice BELOW are 2 methods for setting the URI for each token different to the method above.abi
+    Method above requires the front-end to parse the string and replace {id} appropriately. 
+    Above method is more gas efficient. Below are alternative methods to each uri.
+ */
     /** 
     * @dev URI will follow the template below of link/tokenId.json
     * overrides the constructor URI
     */
-    function uri(uint256 tokenId) override public pure returns (string memory) {
-        return string(abi.encodePacked(string.concat("http://link/", Strings.toString(tokenId), ".json")));
-    }
+    // function uri(uint256 tokenId) override public pure returns (string memory) {
+    //     return string(abi.encodePacked(string.concat("http://link/", Strings.toString(tokenId), ".json")));
+    // }
+
+    /** 
+    * @dev alternative URI retrieval method, uses mapping from tokenId => uri 
+    * must also use the setTokenUri function to set the proper URI for each token
+    */
+    // function uri2(uint256 _tokenId) public view override returns (string memory) {
+    //     return s_tokenToURI[_tokenId];
+    // }
+    // function setTokenUri(uint256 _tokenId, string memory _uri) public onlyOwner {
+    //     s_tokenToURI[_tokenId] = _uri;
+    // }
 }
